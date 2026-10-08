@@ -18,8 +18,22 @@ def decode_caesar_cipher(text: str, shift: int) -> str:
 
     Пример: decode_caesar_cipher("Khoor!", 3) -> "Hello!"
     """
-    # TODO: ваш код здесь
-    ...
+
+    res = ""
+
+    for let in text:
+        if let.isalpha():
+            if let.islower():
+                alphabet = "abcdefghijklmnopqrstuvwxyz"
+            else:
+                alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+            old_position = alphabet.index(let)
+            new_position = (old_position - shift) % 26
+            res += alphabet[new_position]
+        else:
+            res += let
+    return res
 
 
 if __name__ == "__main__":
