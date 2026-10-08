@@ -27,7 +27,6 @@ def decode_caesar_cipher(text: str, shift: int) -> str:
                 alphabet = "abcdefghijklmnopqrstuvwxyz"
             else:
                 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
             old_position = alphabet.index(let)
             new_position = (old_position - shift) % 26
             res += alphabet[new_position]
