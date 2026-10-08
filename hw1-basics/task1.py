@@ -24,12 +24,12 @@ def decode_caesar_cipher(text: str, shift: int) -> str:
     for let in text:
         if let.isalpha():
             if let.islower():
-                alphabet = "abcdefghijklmnopqrstuvwxyz"
+                alph = "abcdefghijklmnopqrstuvwxyz"
             else:
-                alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            old_position = alphabet.index(let)
+                alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            old_position = alph.index(let)
             new_position = (old_position - shift) % 26
-            res += alphabet[new_position]
+            res += alph[new_position]
         else:
             res += let
     return res
