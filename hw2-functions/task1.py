@@ -10,18 +10,14 @@ messy_code.py и запустите его (`python messy_code.py`), прежд�
 
 
 def parse_campaign(line: str) -> dict:
-    """
-    line - строка вида "CID-001;15320;412;530.40"
-    (campaign_id;impressions;clicks;spend), поля разделены `;`.
+    parts = line.strip().split(";")
 
-    Вернуть {"campaign_id": str, "impressions": int, "clicks": int, "spend": float}.
-
-    Пример:
-        parse_campaign("ADV01-001;1000;50;30.0")
-        -> {"campaign_id": "ADV01-001", "impressions": 1000, "clicks": 50, "spend": 30.0}
-    """
-    # TODO: ваш код здесь
-    ...
+    return {
+        "campaign_id": parts[0],
+        "impressions": int(parts[1]),
+        "clicks": int(parts[2]),
+        "spend": float(parts[3]),
+    }
 
 
 def calc_ctr(clicks: int, impressions: int) -> float:
@@ -35,8 +31,10 @@ def calc_ctr(clicks: int, impressions: int) -> float:
         calc_ctr(50, 1000) -> 0.05
         calc_ctr(0, 0) -> 0.0
     """
-    # TODO: ваш код здесь
-    ...
+    if impressions <= 0:
+        return 0.0
+
+    return clicks / impressions
 
 
 def calc_cpc(spend: float, clicks: int) -> float:
@@ -49,8 +47,10 @@ def calc_cpc(spend: float, clicks: int) -> float:
         calc_cpc(30.0, 50) -> 0.6
         calc_cpc(75.0, 0) -> 0.0
     """
-    # TODO: ваш код здесь
-    ...
+    if clicks <= 0:
+        return 0.0
+
+    return spend / clicks
 
 
 def merge_duplicate_campaigns(records: list[dict]) -> list[dict]:
@@ -78,8 +78,24 @@ def merge_duplicate_campaigns(records: list[dict]) -> list[dict]:
             {"campaign_id": "b", "impressions": 200, "clicks": 20, "spend": 8.0},
         ]
     """
-    # TODO: ваш код здесь
-    ...
+    merged = {}
+
+    for record in records:
+        campaign_id = record["campaign_id"]
+
+        if campaign_id not in merged:
+            merged[campaign_id] = {
+                "campaign_id": campaign_id,
+                "impressions": 0,
+                "clicks": 0,
+                "spend": 0.0,
+            }
+
+        merged[campaign_id]["impressions"] += record["impressions"]
+        merged[campaign_id]["clicks"] += record["clicks"]
+        merged[campaign_id]["spend"] += record["spend"]
+
+    return list(merged.values())
 
 
 def format_report(rows: list[dict]) -> str:
@@ -98,8 +114,17 @@ def format_report(rows: list[dict]) -> str:
         format_report([{"campaign_id": "a", "impressions": 1000, "clicks": 50, "spend": 30.0}])
         -> "a: CTR=5.00% CPC=0.60"
     """
-    # TODO: ваш код здесь
-    ...
+    report_lines = []
+
+    for row in rows:
+        ctr = calc_ctr(row["clicks"], row["impressions"])
+        cpc = calc_cpc(row["spend"], row["clicks"])
+
+        report_lines.append(
+            f"{row['campaign_id']}: CTR={ctr:.2%} CPC={cpc:.2f}"
+        )
+
+    return "\n".join(report_lines)
 
 
 if __name__ == "__main__":
